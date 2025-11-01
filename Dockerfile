@@ -2,24 +2,21 @@
 FROM ubuntu:22.04 as voicevox-builder
 
 # VOICEVOX Engine のバージョン
-ARG VOICEVOX_ENGINE_VERSION=0.14.7
+ARG VOICEVOX_ENGINE_VERSION=0.25.0
 
 # 必要なパッケージのインストール
 RUN apt-get update && \
     apt-get install -y \
     wget \
     ca-certificates \
+    p7zip-full \
     && rm -rf /var/lib/apt/lists/*
 
 # VOICEVOX Engine のダウンロードと展開
 WORKDIR /opt
-RUN wget https://github.com/VOICEVOX/voicevox_engine/releases/download/${VOICEVOX_ENGINE_VERSION}/voicevox_engine-linux-x64-${VOICEVOX_ENGINE_VERSION}.zip && \
-    apt-get update && \
-    apt-get install -y unzip && \
-    unzip voicevox_engine-linux-x64-${VOICEVOX_ENGINE_VERSION}.zip && \
-    rm voicevox_engine-linux-x64-${VOICEVOX_ENGINE_VERSION}.zip && \
-    apt-get remove -y unzip && \
-    rm -rf /var/lib/apt/lists/*
+RUN wget https://github.com/VOICEVOX/voicevox_engine/releases/download/${VOICEVOX_ENGINE_VERSION}/voicevox_engine-linux-cpu-x64-${VOICEVOX_ENGINE_VERSION}.7z.001 && \
+    7z x voicevox_engine-linux-cpu-x64-${VOICEVOX_ENGINE_VERSION}.7z.001 && \
+    rm voicevox_engine-linux-cpu-x64-${VOICEVOX_ENGINE_VERSION}.7z.001
 
 # メインイメージ
 FROM python:3.11-slim
@@ -35,7 +32,7 @@ RUN apt-get update && \
     && rm -rf /var/lib/apt/lists/*
 
 # VOICEVOX Engine のコピー
-COPY --from=voicevox-builder /opt/linux-x64 /opt/voicevox_engine
+COPY --from=voicevox-builder /opt/voicevox_engine /opt/voicevox_engine
 
 # Python 依存関係のインストール
 COPY requirements.txt .
