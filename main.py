@@ -1,6 +1,7 @@
 import os
 import logging
 from fastapi import FastAPI, HTTPException, Query
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import Response
 from pydantic import BaseModel, Field
 import httpx
@@ -14,6 +15,15 @@ app = FastAPI(
     title="VOICEVOX TTS Server",
     description="VOICEVOX を使用したテキスト音声合成サーバ",
     version="1.0.0"
+)
+
+# CORS設定
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # 本番環境では具体的なドメインを指定することを推奨
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 # VOICEVOX Engine の URL（環境変数から取得、デフォルトは localhost）
