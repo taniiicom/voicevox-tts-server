@@ -16,7 +16,8 @@ RUN apt-get update && \
 WORKDIR /opt
 RUN wget https://github.com/VOICEVOX/voicevox_engine/releases/download/${VOICEVOX_ENGINE_VERSION}/voicevox_engine-linux-cpu-x64-${VOICEVOX_ENGINE_VERSION}.7z.001 && \
     7z x voicevox_engine-linux-cpu-x64-${VOICEVOX_ENGINE_VERSION}.7z.001 && \
-    rm voicevox_engine-linux-cpu-x64-${VOICEVOX_ENGINE_VERSION}.7z.001
+    rm voicevox_engine-linux-cpu-x64-${VOICEVOX_ENGINE_VERSION}.7z.001 && \
+    mv linux-cpu-x64 voicevox_engine
 
 # メインイメージ
 FROM python:3.11-slim
