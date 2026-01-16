@@ -2,6 +2,13 @@
 
 VOICEVOX を使用したテキスト音声合成 API サーバです。Google Cloud Run にデプロイして使用できます。
 
+## クイックスタート
+
+```bash
+python main.py
+# http://localhost:8080 で起動
+```
+
 ## 機能
 
 - FastAPI ベースの REST API
@@ -10,6 +17,7 @@ VOICEVOX を使用したテキスト音声合成 API サーバです。Google Cl
 - 話者選択、速度、音高、抑揚、音量の調整が可能
 - ヘルスチェックエンドポイント
 - 話者一覧取得
+- **動作確認用 Web UI フロントエンド付属**（Next.js）
 
 ## API エンドポイント
 
@@ -157,7 +165,59 @@ docker build -t voicevox-tts-server .
 docker run -p 8080:8080 voicevox-tts-server
 ```
 
+## 動作確認用フロントエンド（Web UI）
+
+API の動作確認用として、Next.js で作成されたシンプルな Web UI が付属しています。
+
+### セットアップ
+
+```bash
+# フロントエンドディレクトリに移動
+cd frontend
+
+# 依存関係をインストール
+npm install
+
+# 環境変数を設定
+cp .env.local.example .env.local
+```
+
+`.env.local` を編集して、API の URL を設定：
+
+```bash
+# ローカル開発時
+NEXT_PUBLIC_API_URL=http://localhost:8080
+
+# Cloud Run デプロイ先を使用する場合
+NEXT_PUBLIC_API_URL=https://your-service-url.run.app
+```
+
+### 起動方法
+
+```bash
+# 開発サーバーを起動
+npm run dev
+```
+
+ブラウザで http://localhost:3000 を開きます。
+
+### 機能
+
+- テキスト入力、話者選択、パラメータ調整
+- 生成された音声の再生とダウンロード
+- API から話者一覧を自動取得
+
+詳細は `frontend/README.md` を参照してください。
+
 ## 使用例
+
+### Web UI での使用（動作確認）
+
+1. フロントエンドを起動（http://localhost:3000）
+2. テキストボックスに音声合成したいテキストを入力
+3. 話者を選択
+4. 必要に応じてパラメータを調整
+5. 「音声を生成」ボタンをクリック
 
 ### cURL での使用
 
